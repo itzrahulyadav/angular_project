@@ -6,8 +6,13 @@ RUN npm install
 COPY . /app
 RUN npm run build
 
-FROM nginx:alpine
+
+FROM nginxinc/nginx-unprivileged
 COPY --from=build-step /app/dist/* /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/
-EXPOSE 8040
+EXPOSE 8094
 CMD ["nginx", "-g", "daemon off;"]
+
+
+
+
