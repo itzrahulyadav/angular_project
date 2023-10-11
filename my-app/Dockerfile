@@ -15,9 +15,9 @@ RUN npm run build
 # CMD ["nginx", "-g", "daemon off;"]
 
 FROM nginxinc/nginx-unprivileged:1.23.1-alpine
-
 ARG UID=101
 USER root
+RUN apk update
 RUN chown -R $UID:0 /usr/share/nginx/html && chmod -R g+w /usr/share/nginx/html
 USER $UID
 
