@@ -6,23 +6,13 @@ RUN npm install
 COPY . /app
 RUN npm run build
 
-
-# FROM nginxinc/nginx-unprivileged:1.23.1-alpine
-# RUN apt update 
-# COPY --from=build-step /app/dist/* /usr/share/nginx/html
-# COPY nginx.conf /etc/nginx/
-# EXPOSE 8094
-# CMD ["nginx", "-g", "daemon off;"]
-
 FROM nginxinc/nginx-unprivileged:1.23.1-alpine
 ARG UID=101
 USER root
 RUN apk update
 RUN chown -R $UID:0 /usr/share/nginx/html && chmod -R g+w /usr/share/nginx/html
 USER $UID
-
 COPY --from=build-step /app/dist/* /usr/share/nginx/html
-# COPY --from=build-step /app/env.sh /docker-entrypoint.d
 COPY nginx.conf /etc/nginx/
-EXPOSE 8094
+EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
